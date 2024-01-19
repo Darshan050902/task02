@@ -1,14 +1,30 @@
 import React from 'react'
 
-const Test = ({names}) => {
+const image_url = [
+  "https://images.pexels.com/photos/15871749/pexels-photo-15871749/free-photo-of-black-and-white-photograph-of-palm-trees-and-leaves.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+  "https://images.pexels.com/photos/16055364/pexels-photo-16055364/free-photo-of-handsome-man-in-shirt.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+  "https://images.pexels.com/photos/4714529/pexels-photo-4714529.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+]
+const Test = ({data}) => {
+  // console.log({data});
   return (
-    <div style={{display:'flex', flexDirection:'column', alignItems:'center'}}>
-        <div className="title">Beer Names</div>
+    <div className='test-container'>
+        <div className="list-title">Beers!</div>
         <div className="list-items">
             {
-                names?.map((name, ind)=>{
-                    if(name.apiError)return <p style={{backgroundColor:'red'}}>Error loading data</p>
-                    return <p>{name.id}</p>
+                data?.map((value, ind)=>{
+                    return <div key={value.id} className='list-item'>
+                      <div className="item-image"><img src={image_url[ind%image_url.length]} alt="item image" /></div>
+                      <div className="item-body">
+                        <div className="item-desc">
+                          <p>{value.tagline}</p>
+                          <p style={{color:'gray'}}>First brewed : {value.first_brewed}</p>
+                        </div>
+                        <div className='item-attenuation_level'>
+                          <p style={{fontWeight:'bold'}}>{value.attenuation_level}</p>
+                        </div>
+                      </div>
+                    </div>
                 })
             }
         </div>

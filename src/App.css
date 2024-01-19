@@ -1,0 +1,102 @@
+.test-container{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.test-container .list-title{
+    padding: 1rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    position: fixed;
+    width: 30%;
+    border: 2px solid black;
+    border-radius: 5px;
+    top: 0;
+    z-index: 100;
+    background-color: white; 
+}
+
+.test-container .list-items{
+    margin-top: 3rem;
+    width: 32%;
+}
+
+.test-container .list-items .list-item{
+    display: flex;
+    gap: 2rem;
+    border-bottom: 1px solid black;
+    border-radius: 5px;
+    padding: 1rem;
+    margin: 1rem;
+    cursor: pointer;
+    align-items: center;
+}
+
+.test-container .list-items .list-item .item-body{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.test-container .list-items .list-item .item-image img{
+    border-radius: 100%;
+    width: 50px;
+    height: 50px;
+}
+
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+    to { 
+        transform: rotate(360deg);
+    }
+}
+ 
+
+ @-webkit-keyframes rotate {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+    to { 
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+.load {
+	width: 50px;
+	height: 50px;
+	margin: 2rem auto 0;
+	border:solid 10px black;
+	border-radius: 50%;
+	border-right-color: transparent;
+	border-bottom-color: transparent;
+	 -webkit-transition: all 0.5s ease-in;
+    -webkit-animation-name:             rotate; 
+    -webkit-animation-duration:         1.0s; 
+    -webkit-animation-iteration-count:  infinite;
+    -webkit-animation-timing-function: linear;
+    	
+    	 transition: all 0.5s ease-in;
+    animation-name:             rotate; 
+    animation-duration:         1.0s; 
+    animation-iteration-count:  infinite;
+    animation-timing-function: linear; 
+}
+
+@media all and (max-width:600px){
+    .test-container .list-title{
+        width: 100%;
+    }
+
+    .test-container .list-items{
+        width: 100%;
+    }
+
+    .load{
+        width: 30px;
+        height: 30px;
+    }
+}

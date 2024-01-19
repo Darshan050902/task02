@@ -5,6 +5,7 @@ import { InfScroll } from './components/InfScroll';
 import Test from './components/Test';
 import { Loading } from './components/Loading';
 import { End } from './components/End';
+import { Error } from './components/Error';
 
 function App() {
   let container = useRef(null);
@@ -12,8 +13,9 @@ function App() {
   
   const fetchData = async(page) =>{
     try {
-      const response = await axios.get(`https://api.punkapi.com/v2/beers?page=${page}&per_page=40`);
+      const response = await axios.get(`https://api.punkapi.com/v2/beers?page=${page}&per_page=30`);
       const res = response.data
+      // if(res[19].id === 50)throw new Error("Error")
       return res
     } catch (error) {
       console.error(error);
@@ -35,8 +37,10 @@ function App() {
         next={fetchData}
         loader={<Loading />}
         endMessage={<End />}
+        errorMessage={<Error />}
         parentMaxHeight = {pageHeight}
-        displayElement = {(names)=><Test names={names}/>}
+        displayElement = {(data)=><Test data={data}/>}
+        threshold={150}
       />
     </div>  
   );
