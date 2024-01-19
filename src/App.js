@@ -2,26 +2,27 @@ import { useEffect, useRef, useState } from 'react';
 import './App.css';
 import axios from 'axios'
 import { InfScroll } from './components/InfScroll';
+import Test from './components/Test';
+import { Loading } from './components/Loading';
+import { End } from './components/End';
 
 function App() {
-  const [data, setData] = useState([]);
-  const [page, setPage] = useState(1);
   let container = useRef(null);
   const [pageHeight, setPageHeight] = useState();
   
-  const fetchData = async() =>{
+  const fetchData = async(page) =>{
     try {
       const response = await axios.get(`https://api.punkapi.com/v2/beers?page=${page}&per_page=40`);
       const res = response.data
-      setData((prev)=>res);
+      return res
     } catch (error) {
       console.error(error);
     }
   }
 
-  useEffect(()=>{
-    fetchData();
-  },[page])
+  // useEffect(()=>{
+  //   fetchData();
+  // },[page])
 
   useEffect(()=>{
     setPageHeight(container.current.clientHeight);
@@ -31,19 +32,12 @@ function App() {
   return (
     <div style={{height:'100vh'}} ref={container}>
       <InfScroll
-        dataLength={data.length}
-        next={()=>setPage((prev)=>prev+1)}
-        hasMore={data.length?true:false}
-        loader={<h1>Loading...</h1>}
-        endMessage={<h1>Reached the end of the page!</h1>}
+        next={fetchData}
+        loader={<Loading />}
+        endMessage={<End />}
         parentMaxHeight = {pageHeight}
-      >
-        {
-          data?.map((val, id)=>{
-            return <h4 key={val.id}>{val.name}</h4>
-          })
-        }
-      </InfScroll>
+        displayElement = {(names)=><Test names={names}/>}
+      />
     </div>  
   );
 }
