@@ -9,7 +9,8 @@ export const InfScroll = ({next, loader, endMessage, errorMessage, parentMaxHeig
     const [startY, setStartY] = useState(null);
     const [isAtTop, setIsAtTop] = useState(true)
     const mouseDownFlag = useRef(false);
-    let styleObj = useRef({overflowY: 'scroll', maxHeight:`${parentMaxHeight?parentMaxHeight:'100'}vh`, width:'100%', ...style})
+    let styleObj = useRef({overflowY: 'scroll', maxHeight:`${parentMaxHeight?parentMaxHeight:'100'}vh`, width:'100%', position:'absolute', left:'0', right:'0', marginLeft:'auto', marginRight:'auto',  ...style})
+    const [refreshLoading, setRefreshLoading] = useState(false);
 
     const handleScroll = (e) =>{
         if(threshold>100)threshold=100;
@@ -77,13 +78,21 @@ export const InfScroll = ({next, loader, endMessage, errorMessage, parentMaxHeig
         {
           if(e.screenY >= startY && (e.screenY - startY)>= (10/100)*964){
             window.location.reload();
+          }else{
+            let obj = {top:`${e.screenY - startY}px`}
+            styleObj.current = {...styleObj.current, ...obj}
+            setRefreshLoading(true);
           }
         }
       }
     }
+    console.log(styleObj.current);
 
   return (
     <div onScroll={handleScroll} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave} style={styleObj.current} >
+      {isAtTop && refreshLoading && !endFlag && !error?(<div style={{paddingTop:'2rem'}}>
+        {loader?loader:<h4>default loader...</h4>}
+      </div>):null}
       {displayElement(array)}
       {error?(errorMessage?errorMessage:alert("api error")):null}
       {!isAtTop && loading&&!endFlag&&!error?((loader?loader:<h4>default loader...</h4>)):(endFlag?(endMessage?endMessage:<h4>default end!!</h4>):null)}
