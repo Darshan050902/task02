@@ -62,7 +62,7 @@ export const InfScroll = ({next, loader, endMessage, errorMessage, parentMaxHeig
       newAPiCall();
     },[])
     // let mini=1000000000;  // 115  
-    // let maxi = 0  // 1079 -> 964  (to trigger after certaih percent of offset)
+    // let maxi = 0  // 1079 -> 964 
     const handleMouseDown = (e) =>{
       mouseDownFlag.current = true ;
       setStartY(e.screenY);
@@ -86,7 +86,6 @@ export const InfScroll = ({next, loader, endMessage, errorMessage, parentMaxHeig
         }
       }
     }
-    console.log(styleObj.current);
 
   return (
     <div onScroll={handleScroll} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave} style={styleObj.current} >
