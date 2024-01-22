@@ -1,22 +1,25 @@
 import React, { useEffect, useRef, useState } from 'react'
 
 export const InfScroll = ({next, loader, endMessage, errorMessage, parentMaxHeight, displayElement, threshold, dataLength, loadingDelay, style, className}) => {
-    const [array, setArray]=useState([]);
-    const pageRef = useRef(1);
+    const [array, setArray]=useState([]);  // to map the updated data from the api
+    const pageRef = useRef(1);  // a pointer to fetch required amount of data from the api according to threshold provided by the user
     const [loading, setLoading] = useState(false);
-    const [endFlag, setEndFlag] = useState(false);
+    const [endFlag, setEndFlag] = useState(false);   // to check if the user has reached the end of the container
     const [error, setError] = useState(false);
-    const [startY, setStartY] = useState(null);
-    const [isAtTop, setIsAtTop] = useState(true)
-    const mouseDownFlag = useRef(false);
-    let styleObj = useRef({overflowY: 'scroll', maxHeight:`${parentMaxHeight?parentMaxHeight:'100'}vh`, width:'100%', position:'absolute', left:'0', right:'0', marginLeft:'auto', marginRight:'auto',  ...style})
-    const [refreshLoading, setRefreshLoading] = useState(false);
+    const [startY, setStartY] = useState(null);   
+    const [isAtTop, setIsAtTop] = useState(true)   // to check if scroll is on top (used in pull to refresh feature)
+    const mouseDownFlag = useRef(false);   // to check if the user cursor is down for the movement
+    let defaultStyleRef = useRef({overflowY: 'scroll', maxHeight:`${parentMaxHeight?parentMaxHeight:'100'}vh`, width:'100%', position:'absolute', left:'0', right:'0', marginLeft:'auto', marginRight:'auto',  ...style})   // update the default style object with the user provided object
+    const [refreshLoading, setRefreshLoading] = useState(false);   // to handle refresh loading component to render
 
     const handleScroll = (e) =>{
+        // handle thr invalid threshold value
         if(threshold>100)threshold=100;
         if(threshold<0)threshold=0;
+
         if(e.target.scrollTop===0)setIsAtTop(true);
         else setIsAtTop(false);
+
         if((e.target.scrollTop + e.target.clientHeight>=((threshold/100)*(e.target.scrollHeight))) && !loading  && !endFlag){
             debouncedApiCall()
         }
@@ -62,7 +65,8 @@ export const InfScroll = ({next, loader, endMessage, errorMessage, parentMaxHeig
       newAPiCall();
     },[])
     // let mini=1000000000;  // 115  
-    // let maxi = 0  // 1079 -> 964 
+    // let maxi = 0  // 1079 -> 964 (used to trigger the reload page)
+
     const handleMouseDown = (e) =>{
       mouseDownFlag.current = true ;
       setStartY(e.screenY);
@@ -76,11 +80,11 @@ export const InfScroll = ({next, loader, endMessage, errorMessage, parentMaxHeig
       if(mouseDownFlag.current){
         if(isAtTop)
         {
-          if(e.screenY >= startY && (e.screenY - startY)>= (10/100)*964){
+          if(e.screenY >= startY && (e.screenY - startY)>= (10/100)*964){  // 10% assumed 
             window.location.reload();
           }else{
             let obj = {top:`${e.screenY - startY}px`}
-            styleObj.current = {...styleObj.current, ...obj}
+            defaultStyleRef.current = {...defaultStyleRef.current, ...obj}
             setRefreshLoading(true);
           }
         }
@@ -88,7 +92,7 @@ export const InfScroll = ({next, loader, endMessage, errorMessage, parentMaxHeig
     }
 
   return (
-    <div onScroll={handleScroll} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave} style={styleObj.current} >
+    <div onScroll={handleScroll} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave} style={defaultStyleRef.current} >
       {isAtTop && refreshLoading && !endFlag && !error?(<div style={{paddingTop:'2rem'}}>
         {loader?loader:<h4>default loader...</h4>}
       </div>):null}

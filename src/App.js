@@ -30,7 +30,7 @@ function App() {
     color:'red',
     // backgroundColor:'black'
   }
-  // console.log(container.current.style.cssText.split(" ")[1].slice(0, container.current.style.cssText.split(" ")[1].length-1));
+  
   return (
     <div style={{height:'100vh'}} ref={container}>
       <InfScroll
