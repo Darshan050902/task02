@@ -9,7 +9,7 @@ export const InfScroll = ({next, loader, endMessage, errorMessage, parentMaxHeig
     const [startY, setStartY] = useState(null);
     const [isAtTop, setIsAtTop] = useState(true)
     const mouseDownFlag = useRef(false);
-    let styleObj = useRef({overflowY: 'scroll', maxHeight:`${parentMaxHeight?parentMaxHeight:'100'}vh`, ...style})
+    let styleObj = useRef({overflowY: 'scroll', maxHeight:`${parentMaxHeight?parentMaxHeight:'100'}vh`, width:'100%', ...style})
 
     const handleScroll = (e) =>{
         if(threshold>100)threshold=100;
@@ -60,8 +60,8 @@ export const InfScroll = ({next, loader, endMessage, errorMessage, parentMaxHeig
     useEffect(()=>{
       newAPiCall();
     },[])
-    // let mini=1000000000;  // 115
-    // let maxi = 0  // 1079 -> 964
+    // let mini=1000000000;  // 115  
+    // let maxi = 0  // 1079 -> 964  (to trigger after certaih percent of offset)
     const handleMouseDown = (e) =>{
       mouseDownFlag.current = true ;
       setStartY(e.screenY);
@@ -83,7 +83,7 @@ export const InfScroll = ({next, loader, endMessage, errorMessage, parentMaxHeig
     }
 
   return (
-    <div className={className} onScroll={handleScroll} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave} style={styleObj.current} >
+    <div onScroll={handleScroll} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave} style={styleObj.current} >
       {displayElement(array)}
       {error?(errorMessage?errorMessage:alert("api error")):null}
       {!isAtTop && loading&&!endFlag&&!error?((loader?loader:<h4>default loader...</h4>)):(endFlag?(endMessage?endMessage:<h4>default end!!</h4>):null)}

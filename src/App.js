@@ -28,7 +28,7 @@ function App() {
 
   let style = {
     color:'red',
-    backgroundColor:'black'
+    // backgroundColor:'black'
   }
   // console.log(container.current.style.cssText.split(" ")[1].slice(0, container.current.style.cssText.split(" ")[1].length-1));
   return (
@@ -44,7 +44,6 @@ function App() {
         dataLength={10}
         loadingDelay={2}
         style={style}
-        className={"myClass"}
       />
     </div>
   );
