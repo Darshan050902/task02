@@ -9,7 +9,7 @@ const Test = ({data}) => {
   // console.log({data});
   return (
     <div className='test-container'>
-        <div className="list-title">Beers!</div>
+        <div className="list-title">Data!</div>
         <div className="list-items">
             {
                 data?.map((value, ind)=>{
@@ -17,11 +17,11 @@ const Test = ({data}) => {
                       <div className="item-image"><img src={image_url[ind%image_url.length]} alt="item image" /></div>
                       <div className="item-body">
                         <div className="item-desc">
-                          <p>{value.tagline}</p>
-                          <p style={{color:'gray'}}>First brewed : {value.first_brewed}</p>
+                          <p>{value.title}</p>
+                          {/* <p style={{color:'gray'}}>First brewed : {value.first_brewed}</p> */}
                         </div>
                         <div className='item-attenuation_level'>
-                          <p style={{fontWeight:'bold'}}>{value.attenuation_level}</p>
+                          <p style={{fontWeight:'bold'}}>{value.userId}</p>
                         </div>
                       </div>
                     </div>
