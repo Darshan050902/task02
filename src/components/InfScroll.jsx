@@ -66,11 +66,6 @@ export const InfScroll = ({next, loader, endMessage, errorMessage, parentMaxHeig
     const debouncedApiCall = myDebounce(newAPiCall, loadingDelay*1000);
 
     useEffect(()=>{
-      if(refreshLoading)
-      {
-        let obj = { height:'0'}
-        defaultStyleRef.current = {...defaultStyleRef.current, ...obj}
-      }
       newAPiCall();
     },[refresh])
     // let mini=1000000000;  // 115  
@@ -107,7 +102,7 @@ export const InfScroll = ({next, loader, endMessage, errorMessage, parentMaxHeig
 
   return (
     <>
-      {isAtTop && refreshLoading && !endFlag && !error?(<div style={{paddingTop:'2rem'}}>
+      {isAtTop && refreshLoading && !endFlag && !error?(<div style={{paddingTop:'3rem'}}>
         {loader?loader:<h4>default loader...</h4>}
       </div>):null}
     <div onScroll={handleScroll} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave} style={!refreshLoading?defaultStyleRef.current:null} >
