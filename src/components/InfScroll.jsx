@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 
-export const InfScroll = ({next, loader, endMessage, errorMessage, parentMaxHeight, displayElement, threshold, dataLength, loadingDelay, style, className}) => {
+export const InfScroll = ({next, loader, endMessage, errorMessage, parentMaxHeight, displayElement, threshold, dataLength, loadingDelay, style, className, hasPullDownToRefresh}) => {
     const [array, setArray]=useState([]);  // to map the updated data from the api
     const pageRef = useRef(1);  // a pointer to fetch required amount of data from the api according to threshold provided by the user
     const [loading, setLoading] = useState(false);
@@ -105,7 +105,7 @@ export const InfScroll = ({next, loader, endMessage, errorMessage, parentMaxHeig
       {isAtTop && refreshLoading && !endFlag && !error?(<div style={{paddingTop:'3rem'}}>
         {loader?loader:<h4>default loader...</h4>}
       </div>):null}
-    <div onScroll={handleScroll} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave} style={!refreshLoading?defaultStyleRef.current:null} >
+    <div onScroll={handleScroll} onMouseDown={hasPullDownToRefresh?handleMouseDown:null} onMouseMove={hasPullDownToRefresh?handleMouseMove:null} onMouseLeave={hasPullDownToRefresh?handleMouseLeave:null} style={!refreshLoading?defaultStyleRef.current:null} >
       {array?displayElement(array):<h4>No Data</h4>}
       {error?(errorMessage?errorMessage:alert("api error")):null}
       {!isAtTop && loading&&!endFlag&&!error?((loader?loader:<h4>default loader...</h4>)):(endFlag?(endMessage?endMessage:<h4>default end!!</h4>):null)}
