@@ -10,7 +10,7 @@ const Test = ({data}) => {
   return (
     <div className='test-container'>
         <div className="list-title">Data!</div>
-        <div className="list-items">
+        <div className="list-items" style={{overflow:'hidden'}}>
             {
                 data?.map((value, ind)=>{
                     return <div key={value.id} className='list-item'>

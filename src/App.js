@@ -44,6 +44,7 @@ function App() {
         dataLength={10}
         loadingDelay={2}
         style={style}
+        hasPullDownToRefresh={true}
       />
     </div>
   );

@@ -11,6 +11,7 @@ export const InfScroll = ({next, loader, endMessage, errorMessage, parentMaxHeig
     const mouseDownFlag = useRef(false);   // to check if the user cursor is down for the movement
     let defaultStyleRef = useRef({overflowY: 'scroll', maxHeight:`${parentMaxHeight?parentMaxHeight:'100'}vh`, width:'100%', position:'absolute', left:'0', right:'0', marginLeft:'auto', marginRight:'auto',  ...style})   // update the default style object with the user provided object
     const [refreshLoading, setRefreshLoading] = useState(false);   // to handle refresh loading component to render
+    const [refresh, setRefresh] = useState(false);
 
     const handleScroll = (e) =>{
         // handle thr invalid threshold value
@@ -43,6 +44,9 @@ export const InfScroll = ({next, loader, endMessage, errorMessage, parentMaxHeig
         console.log(error);
       }finally{
         setLoading(false);
+        if(refreshLoading)setRefreshLoading(false);
+        let obj = {top:`0px`, height:'100vh'}
+        defaultStyleRef.current = {...defaultStyleRef.current, ...obj}
       }
     }
 
@@ -62,8 +66,13 @@ export const InfScroll = ({next, loader, endMessage, errorMessage, parentMaxHeig
     const debouncedApiCall = myDebounce(newAPiCall, loadingDelay*1000);
 
     useEffect(()=>{
+      if(refreshLoading)
+      {
+        let obj = { height:'0'}
+        defaultStyleRef.current = {...defaultStyleRef.current, ...obj}
+      }
       newAPiCall();
-    },[])
+    },[refresh])
     // let mini=1000000000;  // 115  
     // let maxi = 0  // 1079 -> 964 (used to trigger the reload page)
 
@@ -80,10 +89,15 @@ export const InfScroll = ({next, loader, endMessage, errorMessage, parentMaxHeig
       if(mouseDownFlag.current){
         if(isAtTop)
         {
-          if(e.screenY >= startY && (e.screenY - startY)>= (10/100)*964){  // 10% assumed 
-            window.location.reload();
+          if(e.screenY >= startY && (e.screenY - startY)>= (20/100)*964){  // 10% assumed 
+            mouseDownFlag.current = false;
+            pageRef.current = 1;
+            setArray([]);
+            setTimeout(()=>{
+              newAPiCall();
+            },1000)
           }else{
-            let obj = {top:`${e.screenY - startY}px`}
+            let obj = {top:`${e.screenY - startY}px`, height:'98vh'}
             defaultStyleRef.current = {...defaultStyleRef.current, ...obj}
             setRefreshLoading(true);
           }
@@ -92,13 +106,15 @@ export const InfScroll = ({next, loader, endMessage, errorMessage, parentMaxHeig
     }
 
   return (
-    <div onScroll={handleScroll} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave} style={defaultStyleRef.current} >
+    <>
       {isAtTop && refreshLoading && !endFlag && !error?(<div style={{paddingTop:'2rem'}}>
         {loader?loader:<h4>default loader...</h4>}
       </div>):null}
-      {displayElement(array)}
+    <div onScroll={handleScroll} onMouseDown={handleMouseDown} onMouseMove={handleMouseMove} onMouseLeave={handleMouseLeave} style={!refreshLoading?defaultStyleRef.current:null} >
+      {array?displayElement(array):<h4>No Data</h4>}
       {error?(errorMessage?errorMessage:alert("api error")):null}
       {!isAtTop && loading&&!endFlag&&!error?((loader?loader:<h4>default loader...</h4>)):(endFlag?(endMessage?endMessage:<h4>default end!!</h4>):null)}
     </div>
+    </>
   )
 }
