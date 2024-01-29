@@ -6,6 +6,7 @@ import Test from './components/Test';
 import { Loading } from './components/Loading';
 import { End } from './components/End';
 import { Error } from './components/Error';
+import EfficientInfiniteScroll from './components/EfficientInfiniteScroll';
 
 function App() {
   let container = useRef(null);
@@ -14,9 +15,8 @@ function App() {
   const fetchData = async(startInd, length) =>{
     try {
       const response = await axios.get(`https://jsonplaceholder.typicode.com/posts?_start=${startInd}&_limit=${length}`)
-      const res = response.data
       // if(res[1].id === 13)throw new Error("Error")
-      return res
+      return response
     } catch (error) {
       console.error(error);
     }
@@ -33,19 +33,20 @@ function App() {
   
   return (
     <div style={{height:'100vh'}} ref={container}>
-      <InfScroll
+      {/* <InfScroll
         next={fetchData}
         loader={<Loading />}
         endMessage={<End />}
         errorMessage={<Error />}
         parentMaxHeight = {pageHeight}
         displayElement = {(data)=><Test data={data}/>}
-        threshold={75}
+        threshold={30}
         dataLength={10}
-        loadingDelay={2}
+        loadingDelay={1}
         style={style}
         hasPullDownToRefresh={true}
-      />
+      /> */}
+      <EfficientInfiniteScroll dataLength={10} next={fetchData} displayElement = {(data)=><Test data={data}/>} loader={<Loading />} endComponent={<End />} style={style}/>
     </div>
   );
 }
