@@ -13,8 +13,9 @@ const EfficientInfiniteScroll = ({
     const [hasMore, setHasMore] = useState(true);
     const [items, setItems] = useState([]);
     const pageRef = useRef(1);
-    const [isMouseDown, setIsMouseDown] = useState(false);
+    const mouseDownRef = useRef(false);
     const [stateY, setStateY] = useState(null)
+    const refreshInProgressRef = useRef(false);
 
     const elementRef = useRef(null);
 
@@ -25,7 +26,6 @@ const EfficientInfiniteScroll = ({
                 setHasMore(false);
             }else{
                 setItems((prevItems)=>[...prevItems, ...response.data])
-                // setPage((prev)=>prev+dataLength);
                 pageRef.current += dataLength;
             }
         }catch(err){
@@ -35,7 +35,7 @@ const EfficientInfiniteScroll = ({
 
     const onIntersect = (entries) =>{
         const firstEntry = entries[0];
-        if(firstEntry.isIntersecting && hasMore)
+        if(firstEntry.isIntersecting && hasMore && !refreshInProgressRef.current)
         {
             apiCall();
         }
@@ -54,26 +54,33 @@ const EfficientInfiniteScroll = ({
     }, [items]);
 
     const handleMouseDown = (e) =>{
-        setIsMouseDown(true);
+        mouseDownRef.current = true
         setStateY(e.screenY);
     }
 
     const handleMouseLeave = (e) =>{
-        setIsMouseDown(false);
+        mouseDownRef.current = false;
     }
 
     const handleMouseMove = (e) =>{
-        if(isMouseDown)
+        if(mouseDownRef.current)
         {
             if(e.screenY >= stateY && (e.screenY - stateY)>= (20/100)*964)      // let mini=1000000000;  // 115  
                                                                                 // let maxi = 0  // 1079 -> 964 (used to trigger the reload page)
             {
-                setIsMouseDown(false);
+                mouseDownRef.current = false;
                 pageRef.current = 1;
                 setItems([]);
+                refreshInProgressRef.current = true;
+                setTimeout(()=>{
+                    apiCall()
+                    refreshInProgressRef.current = false;
+                },1000)
+                setHasMore(true);
             }
         }
     }
+
   return (
     <>
     {
