@@ -46,7 +46,7 @@ function App() {
         style={style}
         hasPullDownToRefresh={true}
       /> */}
-      <EfficientInfiniteScroll dataLength={10} next={fetchData} displayElement = {(data)=><Test data={data}/>} loader={<Loading />} endComponent={<End />} style={style}/>
+      <EfficientInfiniteScroll dataLength={10} next={fetchData} displayElement = {(data)=><Test data={data}/>} loader={<Loading />} endComponent={<End />} style={style} hasPullDownToRefresh={true}/>
     </div>
   );
 }

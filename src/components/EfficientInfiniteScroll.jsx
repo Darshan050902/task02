@@ -7,7 +7,8 @@ const EfficientInfiniteScroll = ({
     displayElement,
     loader,
     endComponent,
-    style
+    style,
+    hasPullDownToRefresh
 }) => {
     const [hasMore, setHasMore] = useState(true);
     const [items, setItems] = useState([]);
@@ -76,7 +77,7 @@ const EfficientInfiniteScroll = ({
   return (
     <>
     {
-        items && <div style={style} onMouseDown={handleMouseDown} onMouseLeave={handleMouseLeave} onMouseMove={handleMouseMove}>
+        items && <div style={style} onMouseDown={hasPullDownToRefresh?handleMouseDown:null} onMouseLeave={hasPullDownToRefresh?handleMouseLeave:null} onMouseMove={hasPullDownToRefresh?handleMouseMove:null}>
             {displayElement(items)}
         </div>
     }
