@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react'
-import axios from 'axios'
 
 const EfficientInfiniteScroll = ({
     dataLength,
@@ -37,6 +36,7 @@ const EfficientInfiniteScroll = ({
         const firstEntry = entries[0];
         if(firstEntry.isIntersecting && hasMore && !refreshInProgressRef.current)
         {
+            console.log(hasMore);
             apiCall();
         }
     }
@@ -63,7 +63,7 @@ const EfficientInfiniteScroll = ({
     }
 
     const handleMouseMove = (e) =>{
-        if(mouseDownRef.current)
+        if(mouseDownRef.current && window.scrollY===0)
         {
             if(e.screenY >= stateY && (e.screenY - stateY)>= (20/100)*964)      // let mini=1000000000;  // 115  
                                                                                 // let maxi = 0  // 1079 -> 964 (used to trigger the reload page)
