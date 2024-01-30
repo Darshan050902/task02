@@ -16,7 +16,7 @@ function App() {
   const fetchData = async(startInd, length) =>{
     try {
       const response = await axios.get(`https://jsonplaceholder.typicode.com/posts?_start=${startInd}&_limit=${length}`)
-      // if(res[1].id === 13)throw new Error("Error")
+      // if(response.data[1].id === 13)throw new Error("Error")
       return response
     } catch (error) {
       console.error(error);
@@ -47,7 +47,7 @@ function App() {
         style={style}
         hasPullDownToRefresh={true}
       /> */}
-      <EfficientInfiniteScroll dataLength={10} next={fetchData} displayElement = {(data)=><Test data={data}/>} loader={<Loading />} endComponent={<End />} style={style} hasPullDownToRefresh={true} hasScrollTopTopOption={true} scrollToTopComponent={(data)=><ScrollTopButton flag={data}/>}/>
+      <EfficientInfiniteScroll dataLength={10} next={fetchData} loadingDelay={2000} displayElement = {(data)=><Test data={data}/>} errorComponent={<Error />} loader={<Loading />} endComponent={<End />} style={style} hasPullDownToRefresh={true} hasScrollTopTopOption={true} scrollToTopComponent={(data)=><ScrollTopButton flag={data}/>}/>
     </div>
   );
 }

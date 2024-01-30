@@ -9,7 +9,9 @@ const EfficientInfiniteScroll = ({
     style,
     hasPullDownToRefresh,
     hasScrollTopTopOption,
-    scrollToTopComponent
+    scrollToTopComponent,
+    errorComponent,
+    loadingDelay
 }) => {
     const [hasMore, setHasMore] = useState(true);
     const [items, setItems] = useState([]);
@@ -18,8 +20,8 @@ const EfficientInfiniteScroll = ({
     const [stateY, setStateY] = useState(null)
     const refreshInProgressRef = useRef(false);
     const [takeToTop, setTakeToTop] = useState(false);
-
     const elementRef = useRef(null);
+    const [apiError, setApiError] = useState(false);
 
     const apiCall = async() =>{
         try{
@@ -32,14 +34,29 @@ const EfficientInfiniteScroll = ({
             }
         }catch(err){
             console.log(err);
+            setApiError(true);
         }
     }
+
+    const myDebounce = (func, delay) =>{
+        let timer;
+        return function(...args){
+          const context = this;
+          if(timer)clearTimeout(timer)
+          timer = setTimeout(()=>{
+            timer = null;
+            func.apply(context, args);
+          },delay)
+        }
+      }
+
+    const debouncedApiCall = myDebounce(apiCall, loadingDelay);
 
     const onIntersect = (entries) =>{
         const firstEntry = entries[0];
         if(firstEntry.isIntersecting && hasMore && !refreshInProgressRef.current)
         {
-            apiCall();
+            debouncedApiCall()
         }
     }
 
@@ -85,21 +102,22 @@ const EfficientInfiniteScroll = ({
 
     useEffect(()=>{
         if(takeToTop){
-            window.scrollTo(0,0)
+            window.scrollTo({top: 0, behavior: 'smooth'})
             setTakeToTop(false);
         }
     },[takeToTop])
 
   return (
     <>
-    {hasScrollTopTopOption && items.length>0 && scrollToTopComponent(setTakeToTop)}
-    {
-        items && <div style={style} onMouseDown={hasPullDownToRefresh?handleMouseDown:null} onMouseLeave={hasPullDownToRefresh?handleMouseLeave:null} onMouseMove={hasPullDownToRefresh?handleMouseMove:null}>
-            {displayElement(items)}
-        </div>
-    }
-    {hasMore && (loader? <div ref={elementRef}>{loader}</div> : <div ref={elementRef}>Loading...</div>)}
-    {!hasMore && (endComponent?<div>{endComponent}</div> : <div>Reached the end of page...</div>)}
+        {hasScrollTopTopOption && items.length>0 && scrollToTopComponent(setTakeToTop)}
+        {
+            items && <div style={style} onMouseDown={hasPullDownToRefresh?handleMouseDown:null} onMouseLeave={hasPullDownToRefresh?handleMouseLeave:null} onMouseMove={hasPullDownToRefresh?handleMouseMove:null}>
+                {displayElement(items)}
+                {apiError && errorComponent}
+            </div>
+        }
+        {hasMore  && !apiError && (loader? <div ref={elementRef}>{loader}</div> : <div ref={elementRef}>Loading...</div>)}
+        {!hasMore && !apiError && (endComponent?<div>{endComponent}</div> : <div>Reached the end of page...</div>)}
     </>
   )
 }

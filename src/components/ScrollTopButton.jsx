@@ -1,9 +1,11 @@
 import React from 'react'
 
 const ScrollTopButton = ({flag}) => {
-    console.log(flag);
+  const handleClick = () =>{
+    return flag(true);
+  }
   return (
-    <span className='scrollToTop-button' onClick={()=>{return flag(true)}}>&#8593;</span>
+    <span className='scrollToTop-button' onClick={handleClick}>&#8593;</span>
   )
 }
 

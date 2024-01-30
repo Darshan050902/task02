@@ -103,15 +103,28 @@
 
 .scrollToTop-button{
     position: fixed;
-    top:3rem;
+    color: white;
+    top:3.5rem;
     font-size: 3.5rem;
-    width: 9%;
+    width: 4%;
     height: 8%;
-    border: 1px solid black;
-    right: 0;
+    right: 34%;
     text-align: center;
     justify-content: center;
-    background-color: antiquewhite;
+    background-color: grey;
     border-radius: 5px;
     cursor: pointer;
+    opacity: 0.8;
+    transition: background-color ease-in-out 0.2s;
+}
+
+.scrollToTop-button:hover{
+    background-color: black;
+}
+
+@media all and (max-width:600px){
+    .scrollToTop-button{
+        right: 0;
+        width: 12%;
+    }
 }
