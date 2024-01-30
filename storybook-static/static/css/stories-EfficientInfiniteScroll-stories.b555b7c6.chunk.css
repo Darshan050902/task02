@@ -54,16 +54,6 @@
         transform: rotate(360deg);
     }
 }
- 
-
- @-webkit-keyframes rotate {
-    from {
-        -webkit-transform: rotate(0deg);
-    }
-    to { 
-        -webkit-transform: rotate(360deg);
-    }
-}
 
 .load {
 	width: 50px;
@@ -101,17 +91,4 @@
     }
 }
 
-.scrollToTop-button{
-    position: fixed;
-    top:3rem;
-    font-size: 3.5rem;
-    width: 9%;
-    height: 8%;
-    border: 1px solid black;
-    right: 0;
-    text-align: center;
-    justify-content: center;
-    background-color: antiquewhite;
-    border-radius: 5px;
-    cursor: pointer;
-}
+/*# sourceMappingURL=stories-EfficientInfiniteScroll-stories.b555b7c6.chunk.css.map*/

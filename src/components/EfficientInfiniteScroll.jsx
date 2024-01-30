@@ -7,7 +7,9 @@ const EfficientInfiniteScroll = ({
     loader,
     endComponent,
     style,
-    hasPullDownToRefresh
+    hasPullDownToRefresh,
+    hasScrollTopTopOption,
+    scrollToTopComponent
 }) => {
     const [hasMore, setHasMore] = useState(true);
     const [items, setItems] = useState([]);
@@ -15,6 +17,7 @@ const EfficientInfiniteScroll = ({
     const mouseDownRef = useRef(false);
     const [stateY, setStateY] = useState(null)
     const refreshInProgressRef = useRef(false);
+    const [takeToTop, setTakeToTop] = useState(false);
 
     const elementRef = useRef(null);
 
@@ -36,7 +39,6 @@ const EfficientInfiniteScroll = ({
         const firstEntry = entries[0];
         if(firstEntry.isIntersecting && hasMore && !refreshInProgressRef.current)
         {
-            console.log(hasMore);
             apiCall();
         }
     }
@@ -81,8 +83,16 @@ const EfficientInfiniteScroll = ({
         }
     }
 
+    useEffect(()=>{
+        if(takeToTop){
+            window.scrollTo(0,0)
+            setTakeToTop(false);
+        }
+    },[takeToTop])
+
   return (
     <>
+    {hasScrollTopTopOption && items.length>0 && scrollToTopComponent(setTakeToTop)}
     {
         items && <div style={style} onMouseDown={hasPullDownToRefresh?handleMouseDown:null} onMouseLeave={hasPullDownToRefresh?handleMouseLeave:null} onMouseMove={hasPullDownToRefresh?handleMouseMove:null}>
             {displayElement(items)}

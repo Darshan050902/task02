@@ -64,13 +64,13 @@ export const InfScroll = ({next, loader, endMessage, errorMessage, parentMaxHeig
 
 
 
-        // if((e.target.scrollTop + e.target.clientHeight>=((threshold/100)*(e.target.scrollHeight))) && !loading  && !endFlag){
-        //     debouncedApiCall()
-        //     // topRef.current++;
-        //     // bottomRef.current++;
-        //     // virtualizedArray.shift();
-        //     // setVirtualizedArray((prev)=>[...prev, array[bottomRef.current]]);
-        // }
+        if((e.target.scrollTop + e.target.clientHeight>=((threshold/100)*(e.target.scrollHeight))) && !loading  && !endFlag){
+            debouncedApiCall()
+            // topRef.current++;
+            // bottomRef.current++;
+            // virtualizedArray.shift();
+            // setVirtualizedArray((prev)=>[...prev, array[bottomRef.current]]);
+        }
     }
 
     const newAPiCall = async() =>{
@@ -151,23 +151,23 @@ export const InfScroll = ({next, loader, endMessage, errorMessage, parentMaxHeig
       }
     }
 
-    const onIntersection = (entries) =>{
-      const firstEntry = entries[0];
-      if(firstEntry.isIntersecting && !endFlag){
-        debouncedApiCall()
-      }
-    } 
+    // const onIntersection = (entries) =>{
+    //   const firstEntry = entries[0];
+    //   if(firstEntry.isIntersecting && !endFlag){
+    //     debouncedApiCall()
+    //   }
+    // } 
 
-    useEffect(()=>{
-      const observer = new IntersectionObserver(onIntersection);
-      if(observer && elementRef.current){
-        observer.observe(elementRef.current.firstChild);
-      }
+    // useEffect(()=>{
+    //   const observer = new IntersectionObserver(onIntersection);
+    //   if(observer && elementRef.current){
+    //     observer.observe(elementRef.current.firstChild);
+    //   }
 
-      return ()=>{
-        if(observer)observer.disconnect();
-      }
-    }, [array])
+    //   return ()=>{
+    //     if(observer)observer.disconnect();
+    //   }
+    // }, [array])
 
   return (
     <>

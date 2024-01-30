@@ -7,6 +7,7 @@ import { Loading } from './components/Loading';
 import { End } from './components/End';
 import { Error } from './components/Error';
 import EfficientInfiniteScroll from './components/EfficientInfiniteScroll';
+import ScrollTopButton from './components/ScrollTopButton';
 
 function App() {
   let container = useRef(null);
@@ -46,7 +47,7 @@ function App() {
         style={style}
         hasPullDownToRefresh={true}
       /> */}
-      <EfficientInfiniteScroll dataLength={10} next={fetchData} displayElement = {(data)=><Test data={data}/>} loader={<Loading />} endComponent={<End />} style={style} hasPullDownToRefresh={true}/>
+      <EfficientInfiniteScroll dataLength={10} next={fetchData} displayElement = {(data)=><Test data={data}/>} loader={<Loading />} endComponent={<End />} style={style} hasPullDownToRefresh={true} hasScrollTopTopOption={true} scrollToTopComponent={(data)=><ScrollTopButton flag={data}/>}/>
     </div>
   );
 }
